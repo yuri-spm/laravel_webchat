@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[x-cloak] {
+    display: none;
+}
+/* Add cursor */
+body {
+    cursor: default;
+}
+
+button, a, [role="button"], .cursor-pointer {
+    cursor: pointer;
+}
