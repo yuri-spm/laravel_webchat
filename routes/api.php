@@ -21,10 +21,12 @@ Route::get('/', function (Request $request) {
 Route::post('/login', [LoginController::class, 'login'])
     ->name('login.index');
 
-// public function login(Request $request){
-//     return response()->json([
-//             'email' => $request['email'],
-//             'password' => $request['password']
-//         ]
-//     );
-// }
+Route::post('/users', [LoginController::class, 'users'])
+    ->name('users.index')->middleware('auth:sanctum');
+
+Route::post('/users/{id?}', [LoginController::class, 'users'])
+    ->name('users.index')->middleware('auth:sanctum');
+
+Route::post('/logout', [LoginController::class, 'logout'])
+    ->name('logout.index')->middleware('auth:sanctum');
+
