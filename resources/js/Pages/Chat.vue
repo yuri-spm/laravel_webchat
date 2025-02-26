@@ -1,6 +1,23 @@
 <script setup>
 import AppLayout from '@/Layouts/AppLayout.vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+axios.defaults.withCredentials = true;
+
+const users = ref([]);
+
+onMounted(() => {
+  axios.get('api/users')
+    .then(response => {
+      users.value = response.data;
+      console.log(users.value);
+    })
+    .catch(error => {
+      console.error('Erro ao buscar usuários:', error);
+    });
+});
 </script>
+
 
 <template>
     <AppLayout title="Dashboard">
