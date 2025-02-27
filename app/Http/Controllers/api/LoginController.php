@@ -12,9 +12,11 @@ class LoginController extends Controller
 {
     public function users()
     {
-        $user = Auth::user();
+        $userLogged = Auth::user();
 
-        if (!$user) {
+        $users = User::where('id', '!=', $userLogged->id)->get();
+
+        if (!$userLogged) {
             return response()->json([
                 'status' => false,
                 'message' => 'Usuário não autenticado.',
@@ -24,24 +26,7 @@ class LoginController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Usuário carregado com sucesso.',
-            'data' => User::all()
-        ], Response::HTTP_OK);
-    }
-
-
-    public function logout(Request $request)
-    {
-        if (!$request->user()) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Token inválido ou não fornecido.',
-            ], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $request->user()->tokens()->delete();
-        return response()->json([
-            'status' => true,
-            'message' => 'Logout realizado com sucesso.'
+            'data' => $users
         ], Response::HTTP_OK);
     }
 }

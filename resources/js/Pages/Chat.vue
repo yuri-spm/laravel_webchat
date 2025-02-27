@@ -9,8 +9,8 @@ const users = ref([]);
 onMounted(() => {
   axios.get('api/users')
     .then(response => {
-      users.value = response.data;
-      console.log(users.value);
+      users.value = response.data.data
+      console.log(response.data)
     })
     .catch(error => {
       console.error('Erro ao buscar usuários:', error);
@@ -33,75 +33,10 @@ onMounted(() => {
                     <!--List Users-->
                     <div class="w-3/12 bg-gray-200 bg-opacity-25 border-r border-gray-200 overflow-y-scroll">
                         <ul>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
+                            <li  v-for="user in users" :key="user.id"
+                                class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                                 <p class="flex items-center">
-                                    Yuri do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
-                                    <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
-                                </p>
-                            </li>
-                            <li class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
-                                <p class="flex items-center">
-                                    Amanda do Monte
+                                   {{user.name}}
                                     <span class="ml-2 w-2 h-2 bg-blue-500 rounded-full"></span>
                                 </p>
                             </li>
