@@ -5,6 +5,10 @@ import { ref, onMounted } from 'vue';
 axios.defaults.withCredentials = true;
 
 const users = ref([]);
+methods:{
+    loadmessages: function(){
+        console.log(users.id);
+    },
 
 onMounted(() => {
   axios.get('api/users')
@@ -34,6 +38,7 @@ onMounted(() => {
                     <div class="w-3/12 bg-gray-200 bg-opacity-25 border-r border-gray-200 overflow-y-scroll">
                         <ul>
                             <li  v-for="user in users" :key="user.id"
+                                @click="()=>{loadmessages(users.id)}"
                                 class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                                 <p class="flex items-center">
                                    {{user.name}}
