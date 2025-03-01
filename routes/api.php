@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\api\LoginController;
+use App\Http\Controllers\Api\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +16,11 @@ Route::get('/', function (Request $request) {
 
 
 Route::group(['middleware' => 'auth:sanctum'], function(){
-    Route::get('/users', [LoginController::class, 'users'])->name('users');
+    Route::get('/users',
+     [LoginController::class, 'users'])
+        ->name('users');
+        
+    Route::get('/messages/{user}',
+     [MessageController::class, 'listMessage'])
+        ->name('message.listMessage');
 });

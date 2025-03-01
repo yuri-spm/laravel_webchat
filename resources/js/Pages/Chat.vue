@@ -5,16 +5,19 @@ import { ref, onMounted } from 'vue';
 axios.defaults.withCredentials = true;
 
 const users = ref([]);
-methods:{
-    loadmessages: function(){
-        console.log(users.id);
-    },
+const messages = ref([]);
+
+const loadmessages = (userId) => {
+    axios.get(`api/messages/${userId}`).then(response => {
+        messages.value = response.data.messages
+        console.log(response);
+    });
+};
 
 onMounted(() => {
   axios.get('api/users')
     .then(response => {
       users.value = response.data.data
-      console.log(response.data)
     })
     .catch(error => {
       console.error('Erro ao buscar usuários:', error);
@@ -38,7 +41,7 @@ onMounted(() => {
                     <div class="w-3/12 bg-gray-200 bg-opacity-25 border-r border-gray-200 overflow-y-scroll">
                         <ul>
                             <li  v-for="user in users" :key="user.id"
-                                @click="()=>{loadmessages(users.id)}"
+                                @click="()=>{loadmessages(user.id)}"
                                 class="p-6 text-lg text-gray-600 leading-7 font-semibold border-b border-gray-200 hover:bg-gray-200 hover:bg-opacity-50 hover:cursor-pointer">
                                 <p class="flex items-center">
                                    {{user.name}}
@@ -53,54 +56,20 @@ onMounted(() => {
 
                         <!--box Message-->
                         <div class="w-full p-6 flex flex-col overflow-y-scroll">
-                            <div class="w-full mb-3 text-right">
-                                <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
-                                Ola
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
+                            <div 
+                                v-for="message in messages" :key="message.id"
+                                    class="w-full mb-3 text-right">
+                                        <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
+                                            {{ message.content }}
+                                        </p>
+                                        <span class="block mt-1 text-xs text-gray-500">{{message.created_at  }}</span>
                             </div>
-                            <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;">
-                                Oi tudo bem
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
-                            <div class="w-full mb-3 text-right">
-                                <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
-                                Ola
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
-                            <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;">
-                                Oi tudo bem
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
-                            <div class="w-full mb-3 text-right">
-                                <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
-                                Ola
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
-                            <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;">
-                                Oi tudo bem
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
-                            <div class="w-full mb-3 text-right">
-                                <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
-                                Ola
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
-                            <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;">
-                                Oi tudo bem
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
-                            </div>
+                                <div class="w-full mb-3 text-left">
+                                    <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;">
+                                   
+                                    </p>
+                                    <span class="block mt-1 text-xs text-gray-500">19:25</span>
+                                </div>
                         </div>
 
                         <!--form-->
