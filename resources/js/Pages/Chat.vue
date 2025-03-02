@@ -2,10 +2,13 @@
 import AppLayout from '@/Layouts/AppLayout.vue';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+
 axios.defaults.withCredentials = true;
 
 const users = ref([]);
 const messages = ref([]);
+const page = usePage();
 
 const loadmessages = (userId) => {
     axios.get(`api/messages/${userId}`).then(response => {
@@ -58,9 +61,12 @@ onMounted(() => {
                         <div class="w-full p-6 flex flex-col overflow-y-scroll">
                             <div 
                                 v-for="message in messages" :key="message.id"
-                                    class="w-full mb-3 text-right">
-                                        <p class="inline-block p-2 rounded-md messageFromMe" style="max-width: 75%;">
-                                            {{ message.content }}
+                                :class="(message.from == $page.props.auth.user.id) ? ' text-right' : ''"
+                                    class="w-full mb-3">
+                                        <p 
+                                            :class="(message.from == $page.props.auth.user.id) ? 'messageFromMe' : ''"
+                                            class="inline-block p-2 rounded-md" style="max-width: 75%;">
+                                                {{ message.content }}
                                         </p>
                                         <span class="block mt-1 text-xs text-gray-500">{{message.created_at  }}</span>
                             </div>
