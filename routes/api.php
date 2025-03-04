@@ -19,6 +19,11 @@ Route::group(['middleware' => 'auth:sanctum'], function(){
     Route::get('/users',
      [LoginController::class, 'users'])
         ->name('users');
+
+    Route::get('/users/{user}',
+        [LoginController::class, 'show'])
+           ->name('users.show');
+           
         
     Route::get('/messages/{user}',
      [MessageController::class, 'listMessage'])
