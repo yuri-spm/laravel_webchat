@@ -32,7 +32,7 @@ class LoginController extends Controller
     public function show(User $user)
     {
         return response()->json([
-            'user'=> $user,
+            'data'=> $user,
             Response::HTTP_OK
         ]);
     }

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, nextTick, onMounted } from 'vue';
 import axios from 'axios';
 import moment from 'moment';
 import AppLayout from '@/Layouts/AppLayout.vue';
@@ -10,21 +10,58 @@ axios.defaults.withCredentials = true;
 const users = ref([]);
 const messages = ref([]);
 const page = usePage();
-const userActive = ref([]);
+const userActive = ref(null);
+const message =  ref('');
 
 
 const formatDate = (value) => {
     return value ? moment(value).format("HH:mm") : "";
 };
 
-const loadmessages = (userId) => {
-    axios.get( `api/users/${userId}`).then(response => {
+const loadmessages = async (userId) => {
+    axios.get(`api/users/${userId}`).then(response => {
         userActive.value = response.data.data;
     });
+
     axios.get(`api/messages/${userId}`).then(response => {
-        messages.value = response.data.messages;
+        messages.value = response.data.messages; // Mantém a ordem original das mensagens
+
+        nextTick(() => {
+            scrollToBottom();
+        });
     });
 };
+
+
+const scrollToBottom = () => {
+    nextTick(() => {
+        const chatContainer = document.querySelector('.chat-container');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    });
+};
+
+const sendMessage = async() => {
+    axios.post('api/messages/store', {
+        to: userActive.value.id,
+        content: message.value
+    }).then(response => {
+        messages.value.push({
+            from: page.props.auth.user.id,
+            to: userActive.value.id,
+            content: message.value,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
+        });
+        message.value = '';
+        scrollToBottom();
+    }).catch(error => {
+        console.error("Erro ao enviar mensagem:", error);
+    });
+    
+};
+
 
 onMounted(() => {
     axios.get('api/users')
@@ -66,11 +103,11 @@ onMounted(() => {
                     <!--box Message-->
                     <div class="w-9/12 flex flex-col justify-between">
                         <!--box Message-->
-                        <div class="w-full p-6 flex flex-col overflow-y-scroll">
+                        <div class="w-full p-6 flex flex-col overflow-y-scroll chat-container">
                             <div 
                                 v-for="message in messages" :key="message.id"
                                 :class="(message.from == $page.props.auth.user.id) ? ' text-right' : ''"
-                                class="w-full mb-3">
+                                class="w-full mb-3 message">
                                 <p 
                                     :class="(message.from == $page.props.auth.user.id) ? 'messageFromMe' : ''"
                                     class="inline-block p-2 rounded-md" style="max-width: 75%;">
@@ -79,17 +116,17 @@ onMounted(() => {
                                 <span class="block mt-1 text-xs text-gray-500">{{ formatDate(message.created_at) }}</span>
                             </div>
                             <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;">
+                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;"> Mensagem static
                                 </p>
                                 <span class="block mt-1 text-xs text-gray-500">19:25</span>
                             </div>
                         </div>
 
                         <!--form-->
-                        <div class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
-                            <form>
+                        <div v-if="userActive" class="w-full bg-gray-200 bg-opacity-25 p-6 border-t border-gray-200">
+                            <form v-on:submit.prevent="sendMessage">
                                 <div class="flex rounded-md overflow-hidden border border-gray-300">
-                                    <input type="text" class="flex-1 px-4 py-2 text-sm focus-within:none">
+                                    <input v-model='message' type="text" class="flex-1 px-4 py-2 text-sm focus-within:none">
                                     <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2">Enviar</button>
                                 </div>
                             </form>
@@ -103,10 +140,10 @@ onMounted(() => {
 
 <style>
 .messageFromMe {
-    @apply bg-indigo-300 bg-opacity-25;
+    background-color: rgba(99, 102, 241, 0.25); 
 }
 
 .messageTomMe {
-    @apply bg-indigo-300 bg-opacity-25;
+    background-color: rgba(209, 213, 219, 0.5); 
 }
 </style>

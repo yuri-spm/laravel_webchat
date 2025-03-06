@@ -42,7 +42,7 @@ class MessageController extends Controller
             ->orderBy('created_at', 'ASC')
             ->get();
 
-        return response()->json([
+            return response()->json([
             'messages' => $messages
         ], Response::HTTP_OK);
     }
@@ -59,7 +59,13 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $message = new Message();
+
+        $message->from = Auth::user()->id;
+        $message->to   = $request->to;
+        $message->content = htmlspecialchars($request->content, ENT_QUOTES, 'UTF-8');
+        $message->save();
+
     }
 
     /**
