@@ -24,7 +24,7 @@ const loadmessages = async (userId) => {
     });
 
     axios.get(`api/messages/${userId}`).then(response => {
-        messages.value = response.data.messages; // Mantém a ordem original das mensagens
+        messages.value = response.data.messages;
 
         nextTick(() => {
             scrollToBottom();
