@@ -116,9 +116,9 @@ onMounted(() => {
                                 <span class="block mt-1 text-xs text-gray-500">{{ formatDate(message.created_at) }}</span>
                             </div>
                             <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;"> Mensagem static
+                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;"> {{ message.content }}
                                 </p>
-                                <span class="block mt-1 text-xs text-gray-500">19:25</span>
+                                <span class="block mt-1 text-xs text-gray-500">{{ formatDate(message.created_at) }}</span>
                             </div>
                         </div>
 
