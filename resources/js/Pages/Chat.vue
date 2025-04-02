@@ -106,17 +106,12 @@ onMounted(() => {
                         <div class="w-full p-6 flex flex-col overflow-y-scroll chat-container">
                             <div 
                                 v-for="message in messages" :key="message.id"
-                                :class="(message.from == $page.props.auth.user.id) ? ' text-right' : ''"
+                                :class="(message.from == $page.props.auth.user.id) ? 'text-right' : ''"
                                 class="w-full mb-3 message">
                                 <p 
-                                    :class="(message.from == $page.props.auth.user.id) ? 'messageFromMe' : ''"
+                                    :class="(message.from == $page.props.auth.user.id) ? 'messageFromMe' : 'messageTomMe'"
                                     class="inline-block p-2 rounded-md" style="max-width: 75%;">
                                     {{ message.content }}
-                                </p>
-                                <span class="block mt-1 text-xs text-gray-500">{{ formatDate(message.created_at) }}</span>
-                            </div>
-                            <div class="w-full mb-3 text-left">
-                                <p class="inline-block p-2 rounded-md messageTomMe" style="max-width: 75%;"> {{ message.content }}
                                 </p>
                                 <span class="block mt-1 text-xs text-gray-500">{{ formatDate(message.created_at) }}</span>
                             </div>
